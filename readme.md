@@ -1,8 +1,8 @@
-# TP 1 - Backend Coderhouse
+# TP 2 - Backend Coderhouse (Websockets + Handlebars)
 
 ## ✨ Descripción
 
-Este proyecto consiste en el desarrollo de un servidor backend utilizando **Node.js** y **Express**, que gestiona productos y carritos de compra a través de rutas REST. La información se guarda en archivos JSON utilizando persistencia en el sistema de archivos.
+Este proyecto extiende el trabajo del TP01 incorporando **vistas dinámicas** con Handlebars y **actualización en tiempo real** usando WebSockets (Socket.io). El sistema permite visualizar, agregar y eliminar productos en una vista interactiva, sin necesidad de recargar la página.
 
 ---
 
@@ -10,8 +10,13 @@ Este proyecto consiste en el desarrollo de un servidor backend utilizando **Node
 
 - Node.js
 - Express
+- Express-Handlebars
+- Socket.io
 - JavaScript (ESModules)
-- File System (fs/promises)
+- File System (`fs/promises`)
+- Font Awesome (íconos)
+- Google Fonts (`Quicksand`)
+- CSS personalizado
 
 ---
 
@@ -20,8 +25,8 @@ Este proyecto consiste en el desarrollo de un servidor backend utilizando **Node
 1. **Clonar el repositorio**
 
 ```bash
-git clone https://github.com/PauCedones/TP01-BACK.git
-cd TP01-BACK
+git clone https://github.com/TuUsuario/TP02-BACK.git
+cd TP02-BACK
 ```
 
 2. **Instalar dependencias**
@@ -41,9 +46,37 @@ El servidor estará disponible en:
 
 ---
 
-## 🛒 Endpoints disponibles
+## 🌐 Vistas disponibles
 
-### 🔹 Productos - `/api/products`
+### 🔹 `/home` (vista tradicional con Handlebars)
+
+- Lista estática de productos al momento de cargar la página.
+- Datos renderizados del archivo `products.json`.
+
+### 🔹 `/realtimeproducts` (vista en tiempo real)
+
+- Lista de productos actualizable en tiempo real.
+- Formulario para agregar productos sin recargar.
+- Botón de eliminar producto con actualización inmediata vía WebSocket.
+- Estilo visual amigable, rosado y moderno ✨
+
+---
+
+## 🧠 Funcionalidades en tiempo real
+
+- Comunicación WebSocket (`socket.io`)
+- Broadcast a todos los clientes conectados cuando:
+  - Se agrega un producto
+  - Se elimina un producto
+- Renderizado dinámico del DOM con JS
+
+---
+
+## 🔁 Endpoints REST existentes
+
+(Preservados del TP01)
+
+### Productos - `/api/products`
 
 | Método | Ruta    | Descripción                   |
 | ------ | ------- | ----------------------------- |
@@ -53,39 +86,29 @@ El servidor estará disponible en:
 | PUT    | `/:pid` | Actualizar un producto por ID |
 | DELETE | `/:pid` | Eliminar un producto por ID   |
 
-### 🟦 Ejemplo de body para POST `/api/products`
+### Carritos - `/api/carts`
 
-```json
-{
-  "title": "Remera Ave",
-  "description": "Remera estampada con ave argentina",
-  "code": "AVE001",
-  "price": 3200,
-  "status": true,
-  "stock": 15,
-  "category": "ropa",
-  "thumbnails": ["img/remera1.jpg"]
-}
-```
-
----
-
-### 🔹 Carritos - `/api/carts`
-
-| Método | Ruta                 | Descripción                                    |
-| ------ | -------------------- | ---------------------------------------------- |
-| POST   | `/`                  | Crear un carrito nuevo                         |
-| GET    | `/:cid`              | Obtener los productos de un carrito por su ID  |
-| POST   | `/:cid/product/:pid` | Agregar un producto al carrito (de uno en uno) |
+| Método | Ruta                 | Descripción                               |
+| ------ | -------------------- | ----------------------------------------- |
+| POST   | `/`                  | Crear un carrito nuevo                    |
+| GET    | `/:cid`              | Obtener productos de un carrito por su ID |
+| POST   | `/:cid/product/:pid` | Agregar un producto al carrito específico |
 
 ---
 
 ## 📁 Estructura del proyecto
 
 ```
-├── data/
-│   ├── products.json
-│   └── carts.json
+├── products.json
+├── public/
+│   └── js/
+│       └── realtime.js
+│   └── style.css
+├── views/
+│   ├── layouts/
+│   │   └── main.handlebars
+│   ├── home.handlebars
+│   └── realTimeProducts.handlebars
 ├── src/
 │   ├── app.js
 │   ├── routes/
@@ -101,19 +124,15 @@ El servidor estará disponible en:
 
 ---
 
-## ❌ Nota importante
-
-🛑 La carpeta `node_modules` no debe subirse al repositorio.  
-Está ignorada mediante el archivo `.gitignore`.
-
----
-
 ## ✅ Requisitos cumplidos
 
-- Servidor Express en puerto 8080
-- Rutas de productos y carritos separadas
-- Persistencia con archivos `.json`
-- Gestión con clases `ProductManager` y `CartManager`
+- Handlebars como motor de vistas
+- WebSockets con Socket.io
+- Rutas `/home` y `/realtimeproducts`
+- Actualización de productos en tiempo real
+- Estilo visual cuidado y moderno
+- Persistencia en archivo `.json`
+- Separación clara de responsabilidades (rutas, lógica, vistas)
 
 ---
 
