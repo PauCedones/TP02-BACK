@@ -1,0 +1,28 @@
+[
+  {
+    "id": "1751847168488",
+    "status": true,
+    "title": "Remera Ave",
+    "description": "Remera estampada con ave argentina",
+    "code": "AVE001",
+    "price": 3500,
+    "stock": 20,
+    "category": "ropa",
+    "thumbnails": [
+      "img/remera1.jpg"
+    ]
+  },
+  {
+    "id": "1751847582270",
+    "status": true,
+    "title": "Taza Sailor Moon",
+    "description": "Taza de Sailor Moon rosa",
+    "code": "TAZAS001",
+    "price": 5000,
+    "stock": 35,
+    "category": "vajilla",
+    "thumbnails": [
+      "img/taza1.jpg"
+    ]
+  }
+]
