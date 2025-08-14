@@ -1,35 +1,44 @@
+// public/js/realtime.js
 const socket = io();
 
-const form = document.getElementById("addProductForm");
-const productList = document.getElementById("productList");
-
-form.addEventListener("submit", (e) => {
+// Submit alta
+document.getElementById("productForm")?.addEventListener("submit", (e) => {
   e.preventDefault();
-
-  const formData = new FormData(form);
-  const product = Object.fromEntries(formData.entries());
-  product.price = parseFloat(product.price);
-  product.stock = parseInt(product.stock);
-
-  socket.emit("addProduct", product);
-  form.reset();
+  const fd = new FormData(e.target);
+  const product = Object.fromEntries(fd);
+  socket.emit("newProduct", product);
+  e.target.reset();
 });
 
-function deleteProduct(id) {
-  socket.emit("deleteProduct", id);
-}
+// Delegación: eliminar
+document.getElementById("productList")?.addEventListener("click", (e) => {
+  if (e.target.classList.contains("btn-delete")) {
+    const id = e.target.getAttribute("data-id");
+    socket.emit("deleteProduct", { id });
+  }
+});
 
-socket.on("productListUpdated", (products) => {
-  productList.innerHTML = "";
+// Render de la lista
+function renderList(products) {
+  const list = document.getElementById("productList");
+  if (!list) return;
+  list.innerHTML = "";
   products.forEach((p) => {
     const li = document.createElement("li");
+    li.setAttribute("data-id", p.id);
     li.innerHTML = `
-    <strong>${p.title}</strong> - $${p.price}
-    <button onclick="deleteProduct('${p.id}')">
-      <i class="fas fa-trash"></i>
-    </button>
-  `;
-
-    productList.appendChild(li);
+      <strong>${p.title}</strong> - $${p.price}
+      <small>(código: ${p.code ?? ""})</small>
+      <button class="btn-delete" data-id="${p.id}">Eliminar</button>
+    `;
+    list.appendChild(li);
   });
+}
+
+socket.on("updateProducts", (products) => {
+  renderList(products);
+});
+
+socket.on("errorMessage", (msg) => {
+  alert(msg);
 });

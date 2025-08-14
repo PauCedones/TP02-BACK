@@ -1,57 +1,55 @@
-import fs from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
+import { randomUUID } from "crypto";
 
 export default class ProductManager {
-  constructor(path) {
-    this.path = path;
+  constructor(filePath) {
+    this.filePath = filePath; // Ruta a products.json en la raíz del proyecto
   }
 
-  async _readFile() {
+  async _read() {
     try {
-      const data = await fs.readFile(this.path, "utf-8");
-      return JSON.parse(data);
+      const data = await readFile(this.filePath, "utf-8");
+      return JSON.parse(data || "[]");
     } catch {
       return [];
     }
   }
 
-  async _writeFile(data) {
-    await fs.writeFile(this.path, JSON.stringify(data, null, 2));
+  async _write(data) {
+    await writeFile(this.filePath, JSON.stringify(data, null, 2));
   }
 
   async getProducts() {
-    return await this._readFile();
+    return await this._read();
   }
 
-  async getProductById(id) {
-    const products = await this._readFile();
-    return products.find((p) => p.id == id);
-  }
+  async addProduct(p) {
+    const products = await this._read();
 
-  async addProduct(product) {
-    const products = await this._readFile();
-    const newProduct = {
-      id: Date.now().toString(),
-      status: true,
-      ...product,
+    // Validaciones mínimas
+    if (!p.title || !p.code || !p.price) {
+      throw new Error("Faltan campos: title, code, price");
+    }
+
+    const newP = {
+      id: randomUUID(),
+      title: String(p.title),
+      description: p.description ? String(p.description) : "",
+      code: String(p.code),
+      price: Number(p.price),
+      stock: p.stock ? Number(p.stock) : 0,
+      category: p.category ? String(p.category) : "",
     };
-    products.push(newProduct);
-    await this._writeFile(products);
-    return newProduct;
-  }
 
-  async updateProduct(id, updatedFields) {
-    const products = await this._readFile();
-    const index = products.findIndex((p) => p.id == id);
-    if (index === -1) return null;
-    delete updatedFields.id;
-    products[index] = { ...products[index], ...updatedFields };
-    await this._writeFile(products);
-    return products[index];
+    products.push(newP);
+    await this._write(products);
+    return newP;
   }
 
   async deleteProduct(id) {
-    let products = await this._readFile();
-    products = products.filter((p) => p.id != id);
-    await this._writeFile(products);
+    const products = await this._read();
+    const updated = products.filter((p) => String(p.id) !== String(id));
+    await this._write(updated);
+    return products.length !== updated.length;
   }
 }

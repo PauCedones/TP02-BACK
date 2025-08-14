@@ -1,6 +1,14 @@
-<h1>Productos</h1>
+<h1>Listado de productos</h1>
+
 <ul>
   {{#each products}}
-    <li>{{title}} - ${{price}}</li>
+    <li><strong>{{title}}</strong>
+      - ${{price}}
+      <small>(código: {{code}})</small></li>
   {{/each}}
 </ul>
+
+<p>
+  Ir a la vista en tiempo real 👉
+  <a href="/realtimeproducts">/realtimeproducts</a>
+</p>

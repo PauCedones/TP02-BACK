@@ -1,112 +1,11 @@
 [
   {
-    "id": "1",
-    "title": "Remera Ave",
-    "description": "Remera estampada con ave argentina",
-    "code": "AVE001",
-    "price": 3500,
-    "stock": 20,
-    "category": "ropa",
-    "status": true
-  },
-  {
-    "id": "2",
-    "title": "Taza Sailor Moon",
-    "description": "Taza de Sailor Moon rosa",
-    "code": "TAZAS001",
+    "id": "d96bc88b-fc83-478c-93d6-591d9cecc8fe",
+    "title": "Hola",
+    "description": "palabra hola en dorado",
+    "code": "123",
     "price": 5000,
-    "stock": 35,
-    "category": "vajilla",
-    "status": true
-  },
-  {
-    "id": "3",
-    "title": "Cuaderno Cactus",
-    "description": "Cuaderno A5 con diseño de cactus",
-    "code": "CUA001",
-    "price": 2200,
-    "stock": 50,
-    "category": "papelería",
-    "status": true
-  },
-  {
-    "id": "4",
-    "title": "Bolso Totoro",
-    "description": "Bolso ecológico con diseño de Totoro",
-    "code": "BOLSO001",
-    "price": 4800,
-    "stock": 15,
-    "category": "accesorios",
-    "status": true
-  },
-  {
-    "id": "5",
-    "title": "Llavero Naruto",
-    "description": "Llavero de goma con personaje Naruto",
-    "code": "LLAVE001",
-    "price": 1500,
-    "stock": 100,
-    "category": "accesorios",
-    "status": true
-  },
-  {
-    "id": "6",
-    "title": "Agenda Floral",
-    "description": "Agenda 2025 con tapa floral",
-    "code": "AGENDA001",
-    "price": 3600,
-    "stock": 40,
-    "category": "papelería",
-    "status": true
-  },
-  {
-    "id": "7",
-    "title": "Estuche Animales",
-    "description": "Estuche con diseño de animales kawaii",
-    "code": "ESTUCHE001",
-    "price": 2800,
-    "stock": 25,
-    "category": "papelería",
-    "status": true
-  },
-  {
-    "id": "8",
-    "title": "Gorra Pikachu",
-    "description": "Gorra amarilla con orejas de Pikachu",
-    "code": "GORRA001",
-    "price": 6000,
-    "stock": 12,
-    "category": "ropa",
-    "status": true
-  },
-  {
-    "id": "9",
-    "title": "Sticker Pack Ghibli",
-    "description": "Set de 30 stickers de Studio Ghibli",
-    "code": "STICKER001",
-    "price": 1800,
-    "stock": 80,
-    "category": "papelería",
-    "status": true
-  },
-  {
-    "id": "10",
-    "title": "Mate Pava",
-    "description": "Mate de cerámica estilo pava vintage",
-    "code": "MATE001",
-    "price": 4200,
-    "stock": 22,
-    "category": "vajilla",
-    "status": true
-  },
-  {
-    "id": "1753665499053",
-    "status": true,
-    "title": "Teclado gamer",
-    "description": "teclado gamer mecanico bluetooh con luces rosas",
-    "code": "TECLADO001",
-    "price": 70000,
-    "stock": 5,
-    "category": "computacion"
+    "stock": 10,
+    "category": "Palabras"
   }
 ]
