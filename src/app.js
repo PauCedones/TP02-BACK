@@ -5,22 +5,26 @@ import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import path from "path";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+dotenv.config();
 
-import productsRouter from "./routes/products.router.js";
-import cartsRouter from "./routes/carts.router.js";
+import { connectMongo } from "./db/mongo.js";
+
+// ⬇️ Usa SIEMPRE named exports (como te pasé en los routers del TP03)
+import { productsRouter } from "./routes/products.router.js";
+import { cartsRouter } from "./routes/carts.router.js";
+import { viewsRouter } from "./routes/views.router.js";
+
+// Si aún usás ProductManager por archivo para la vista realtime, lo dejamos (no afecta Mongo)
 import ProductManager from "./managers/ProductManager.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// raíz del proyecto (un nivel arriba de /src)
 const rootDir = path.join(__dirname, "..");
 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
-
-// Persistencia por archivo en la raíz
-const productManager = new ProductManager(path.join(rootDir, "products.json"));
 
 // Middlewares
 app.use(express.json());
@@ -32,11 +36,19 @@ app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
 app.set("views", path.join(rootDir, "views"));
 
-// Rutas API
+// 🔌 Conexión Mongo (antes de montar routers está ok)
+await connectMongo();
+
+// APIs (montadas UNA sola vez)
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
-// Home
+// Vistas
+app.use("/", viewsRouter);
+
+// ---- SOCKETS (opcional, tu realtime por archivo) ----
+const productManager = new ProductManager(path.join(rootDir, "products.json"));
+
 app.get("/", async (req, res) => {
   const products = await productManager.getProducts();
   res.render("realTimeProducts", {
@@ -45,20 +57,16 @@ app.get("/", async (req, res) => {
   });
 });
 
-// Vista realtime
 app.get("/realtimeproducts", async (req, res) => {
   const products = await productManager.getProducts();
   res.render("realTimeProducts", { products, title: "Realtime" });
 });
 
-// ----- SOCKETS -----
 io.on("connection", async (socket) => {
   console.log("Cliente conectado:", socket.id);
 
-  // Lista inicial
   socket.emit("updateProducts", await productManager.getProducts());
 
-  // Alta
   socket.on("newProduct", async (product) => {
     try {
       await productManager.addProduct(product);
@@ -69,7 +77,6 @@ io.on("connection", async (socket) => {
     }
   });
 
-  // Baja
   socket.on("deleteProduct", async ({ id }) => {
     try {
       await productManager.deleteProduct(id);
@@ -81,8 +88,8 @@ io.on("connection", async (socket) => {
   });
 });
 
+// Server
 const PORT = process.env.PORT || 8080;
-
 httpServer.listen(PORT, () => {
-  console.log(`Servidor listo en http://localhost:${PORT}`);
+  console.log(`✅ Servidor listo en http://localhost:${PORT}`);
 });
